@@ -1,6 +1,6 @@
-package de.eidoop.sudoku.components;
+package de.eidoop.sudoku.gui.components;
 
-import de.eidoop.sudoku.app.sudokus.Sudoku;
+import de.eidoop.sudoku.api.entities.Sudoku;
 
 import java.awt.*;
 

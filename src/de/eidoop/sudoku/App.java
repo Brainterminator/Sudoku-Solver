@@ -1,6 +1,6 @@
 package de.eidoop.sudoku;
 
-import de.eidoop.sudoku.frames.SudokuFrame;
+import de.eidoop.sudoku.gui.frames.SudokuFrame;
 
 public class App {
     public static void main(String[] args) {

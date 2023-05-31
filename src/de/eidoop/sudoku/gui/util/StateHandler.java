@@ -1,6 +1,7 @@
-package de.eidoop.sudoku.util;
+package de.eidoop.sudoku.gui.util;
 
-import de.eidoop.sudoku.app.enums.SudokuZustand;
+
+import de.eidoop.sudoku.api.enums.SudokuZustand;
 
 public class StateHandler {
     public static String getError(int i){
