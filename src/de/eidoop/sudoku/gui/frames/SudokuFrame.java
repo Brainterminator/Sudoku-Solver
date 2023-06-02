@@ -1,17 +1,14 @@
 package de.eidoop.sudoku.gui.frames;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
-import de.eidoop.sudoku.api.enums.SudokuZustand;
+import de.eidoop.sudoku.api.enums.SudokuState;
 import de.eidoop.sudoku.api.exceptions.*;
-import de.eidoop.sudoku.api.lader.BeispielLader;
-import de.eidoop.sudoku.api.lader.SudokuLader;
-import de.eidoop.sudoku.api.loeser.Loeser;
-import de.eidoop.sudoku.api.loeser.ProbierSudoku;
-import de.eidoop.sudoku.api.loeser.StrategieSudoku;
-import de.eidoop.sudoku.api.loeser.ZufallSudoku;
-import de.eidoop.sudoku.api.ui.ISudokuAnzeige;
+import de.eidoop.sudoku.api.solver.BruteForceSolver;
+import de.eidoop.sudoku.api.solver.RandomSolver;
+import de.eidoop.sudoku.api.solver.SaveSolver;
+import de.eidoop.sudoku.api.solver.Solver;
+import de.eidoop.sudoku.api.ui.ISudokuRenderer;
 import de.eidoop.sudoku.gui.components.SudokuButton;
-import de.eidoop.sudoku.gui.util.StateHandler;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,20 +16,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class SudokuFrame extends Frame implements ISudokuAnzeige {
+public class SudokuFrame extends Frame implements ISudokuRenderer {
 
-    private String currentError = "Kein Fehler";
+    private String currentError = "";
     private int currentX, currentY, currentValue;
-    private Loeser loeser;
+    private Solver solver;
     private final TextField text;
     private final Sudoku sudoku;
 
-    public SudokuFrame() {
+    public SudokuFrame(Sudoku sudoku) {
         super("Sudoku App");
-        int fensterHoehe = 545;
-        int fensterBreite = 245;
-        this.setSize(fensterBreite, fensterHoehe);
-        // ShutdownAdapter als anonyme Klasse
+        int height = 545;
+        int width = 245;
+        this.setSize(width, height);
+        this.sudoku = sudoku;
+        this.solver = new BruteForceSolver(sudoku);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -40,17 +38,8 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
             }
         });
 
-        // Layout ohne Sonderverhalten setzten (siehe später LayoutManager)
         this.setLayout(null);
         this.setResizable(false);
-
-
-        // Sudoku erstellen
-
-        SudokuLader lader = new BeispielLader();
-        sudoku = new Sudoku();
-        lader.ladeSudoku(sudoku);
-        loeser=new ProbierSudoku(sudoku);
 
 
         // Schaltflächen generieren und platzieren
@@ -83,8 +72,8 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
         loesenButton.setLabel("Lösen");
         // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
         loesenButton.addActionListener(e -> {
-            loeser.loesen();
-            currentError = "Kein Fehler";
+            solver.solve();
+            currentError = "";
             update();
         });
         loesenButton.setBounds(10, 50 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
@@ -101,8 +90,8 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
                     sudoku.setEmpty(i, j);
                 }
             }
-            sudoku.setZustand(SudokuZustand.GELADEN);
-            currentError = "Kein Fehler";
+            sudoku.setState(SudokuState.LOADED);
+            currentError = "";
             update();
         });
         neuButton.setBounds(10 + buttonGroesse * 4 + 10, 50 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
@@ -113,7 +102,7 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
         Button probierButton = new Button();
         probierButton.setLabel("Probieren");
         // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
-        probierButton.addActionListener(e -> setLoeser(new ProbierSudoku(sudoku)));
+        probierButton.addActionListener(e -> setLoeser(new BruteForceSolver(sudoku)));
         probierButton.setBounds(10, 110 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
         this.add(probierButton);
 
@@ -122,7 +111,7 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
         Button zufallButton = new Button();
         zufallButton.setLabel("Zufall");
         // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
-        zufallButton.addActionListener(e -> setLoeser(new ZufallSudoku(sudoku)));
+        zufallButton.addActionListener(e -> setLoeser(new RandomSolver(sudoku)));
         zufallButton.setBounds(10, 140 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
         this.add(zufallButton);
 
@@ -131,7 +120,7 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
         Button strategieButton = new Button();
         strategieButton.setLabel("Strategie");
         // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
-        strategieButton.addActionListener(e -> setLoeser(new StrategieSudoku(sudoku)));
+        strategieButton.addActionListener(e -> setLoeser(new SaveSolver(sudoku)));
         strategieButton.setBounds(10, 170 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
         this.add(strategieButton);
 
@@ -154,7 +143,7 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                setText(StateHandler.getZustandFromEnum(sudoku.getZustand()));
+                setText(sudoku.getState().getStateName());
             }
         };
         zustand.setBounds(10, 230 + buttonGroesse + 10, buttonGroesse * 4, buttonGroesse);
@@ -167,7 +156,7 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
             currentValue = Integer.parseInt(((TextField) e.getSource()).getText());
             try {
                 sudoku.setFixedValue(currentY + 1, currentX + 1, currentValue);
-                currentError = "Kein Fehler";
+                currentError = "";
                 if (currentX < 8) currentX++;
                 else {
                     currentX = 0;
@@ -177,16 +166,18 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
                         currentY = 0;
                     }
                 }
-            } catch (WertInQuadrantVorhandenException ex) {
+            } catch (QuadrantOccupiedException ex) {
                 currentError = "Quadrant belegt!";
-            } catch (WertInSpalteVorhandenException ex) {
+            } catch (ColumnOccupiedException ex) {
                 currentError = "Spalte belegt!";
-            } catch (WertInZeileVorhandenException ex) {
+            } catch (RowOccupiedException ex) {
                 currentError = "Zeile belegt!";
-            } catch (WertebereichUngueltigException ex) {
+            } catch (ValueOutOfRangeException ex) {
                 currentError = "Ungültiger Wertebereich!";
-            } catch (FeldBelegtException ex) {
+            } catch (FieldFixedException ex) {
                 currentError = "Feld belegt!";
+            } catch (CoordinatesOutOfRangeException ex) {
+                currentError = "Coordinates out of Range!";
             }
             text.setText("");
             update();
@@ -204,12 +195,12 @@ public class SudokuFrame extends Frame implements ISudokuAnzeige {
         this.setVisible(true);
     }
 
-    void setLoeser(Loeser loeser){
-        this.loeser= loeser;
+    void setLoeser(Solver solver){
+        this.solver= solver;
     }
-
     @Override
-    public void druckeSudoku(Sudoku sudoku) {
+    public void print(Sudoku sudoku) {
 
     }
 }
+

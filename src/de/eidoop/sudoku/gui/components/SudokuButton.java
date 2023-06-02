@@ -17,7 +17,7 @@ public class SudokuButton extends Button {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(sudoku.getFeld(x,y).getWert()==0)setLabel("");
-        else setLabel(Integer.toString(sudoku.getFeld(x,y).getWert()));
+        if(sudoku.getField(x,y).getValue()==0)setLabel("");
+        else setLabel(Integer.toString(sudoku.getField(x,y).getValue()));
     }
 }
