@@ -1,4 +1,4 @@
-package de.eidoop.sudoku.gui.frames;
+package de.eidoop.sudoku.solver.frames;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
 import de.eidoop.sudoku.api.enums.SudokuState;
@@ -8,7 +8,7 @@ import de.eidoop.sudoku.api.solver.RandomSolver;
 import de.eidoop.sudoku.api.solver.SaveSolver;
 import de.eidoop.sudoku.api.solver.Solver;
 import de.eidoop.sudoku.api.ui.ISudokuRenderer;
-import de.eidoop.sudoku.gui.components.SudokuButton;
+import de.eidoop.sudoku.solver.components.SudokuButton;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

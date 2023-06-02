@@ -1,11 +1,9 @@
-package de.eidoop.sudoku;
+package de.eidoop.sudoku.solver;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
 import de.eidoop.sudoku.api.loader.ExampleLoader;
 import de.eidoop.sudoku.api.loader.SudokuLoader;
-import de.eidoop.sudoku.api.solver.BruteForceSolver;
-import de.eidoop.sudoku.api.solver.Solver;
-import de.eidoop.sudoku.gui.frames.SudokuFrame;
+import de.eidoop.sudoku.solver.frames.SudokuFrame;
 
 public class App {
     public static void main(String[] args) {

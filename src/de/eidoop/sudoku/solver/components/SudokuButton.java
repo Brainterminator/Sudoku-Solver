@@ -1,4 +1,4 @@
-package de.eidoop.sudoku.gui.components;
+package de.eidoop.sudoku.solver.components;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
 
