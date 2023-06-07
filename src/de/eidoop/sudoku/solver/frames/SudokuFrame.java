@@ -27,7 +27,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         super("Sudoku App");
         int buttonSize = 25;
         int elementWidth = 9*buttonSize;
-        int height = 545;
+        int height = 455;
         int width = elementWidth + 20;
         int offset = 31;
         int gridSize = 2;
@@ -94,6 +94,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             }
         };
         errorDisplay.setBackground(Color.LIGHT_GRAY);
+        errorDisplay.setAlignment(Label.CENTER);
         errorDisplay.setBounds(10, offset + (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(errorDisplay);
 
@@ -102,7 +103,6 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button emptyButton = new Button();
         emptyButton.setLabel("New Empty");
-        // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
         emptyButton.addActionListener(e -> {
             sudoku.reset();
             currentError = "";
@@ -116,7 +116,6 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button exampleButton = new Button();
         exampleButton.setLabel("New Example");
-        // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
         exampleButton.addActionListener(e -> {
             new ExampleLoader().loadSudoku(sudoku);
             currentError = "";
@@ -126,43 +125,42 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         this.add(exampleButton);
 
 
+        // State display
 
-        // Zustand
-
-        Label zustand = new Label() {
+        Label state = new Label() {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
                 setText(sudoku.getState().getStateName());
             }
         };
-        zustand.setBounds(10, 180 + offset + buttonSize + 10, buttonSize * 9, buttonSize);
-        this.add(zustand);
+        state.setBackground(Color.LIGHT_GRAY);
+        state.setAlignment(Label.CENTER);
+        state.setBounds(10, offset + 4*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(state);
 
 
-        //Probier Button
+        //Solve Button
 
-        Button probierButton = new Button();
-        probierButton.setLabel("Probieren");
-        // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
-        probierButton.addActionListener(e -> {
+        Button solveButton = new Button();
+        solveButton.setLabel("Solve");
+        solveButton.addActionListener(e -> {
             new BruteForceSolver(sudoku).solve();
             print(sudoku);
         });
-        probierButton.setBounds(10, 60 + offset + buttonSize + 10, buttonSize * 4, buttonSize);
-        this.add(probierButton);
+        solveButton.setBounds(10, offset + 5*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(solveButton);
 
-        //Strategie Button
+        //Next Step Button
 
-        Button strategieButton = new Button();
-        strategieButton.setLabel("Strategie");
-        // ActionListener als anonyme Klasse mit Referenz auf lokale Variable
-        strategieButton.addActionListener(e -> {
+        Button nextStepButton = new Button();
+        nextStepButton.setLabel("Next Step");
+        nextStepButton.addActionListener(e -> {
             new SaveSolver(sudoku).solve();
             print(sudoku);
         });
-        strategieButton.setBounds(10, 120 + offset + buttonSize + 10, buttonSize * 4, buttonSize);
-        this.add(strategieButton);
+        nextStepButton.setBounds(10, offset + 6*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(nextStepButton);
 
 
         // Sudoku Fields
@@ -180,7 +178,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
                         text.requestFocus();
                     }
                 });
-                b.setBounds(i * buttonSize + 10, j * buttonSize + 260 + offset, buttonSize, buttonSize);
+                b.setBounds(i * buttonSize + 10, j * buttonSize + offset + 7*(buttonSize + gridSize), buttonSize, buttonSize);
                 this.add(b);
             }
         }
