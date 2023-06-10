@@ -1,4 +1,4 @@
-package de.eidoop.sudoku.api.loader;
+package de.eidoop.sudoku.api.handler;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
 import org.xml.sax.Attributes;

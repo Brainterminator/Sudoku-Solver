@@ -1,6 +1,8 @@
 package de.eidoop.sudoku.api.loader;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
+import de.eidoop.sudoku.api.enums.SudokuState;
+import de.eidoop.sudoku.api.handler.SudokuContentHandler;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
@@ -33,7 +35,10 @@ public class XMLLoader extends SudokuLoader{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
             parser.parse(xmlInputStream, new SudokuContentHandler(sudoku));
-        } catch(Exception e){ }
+        } catch(Exception e){
+            sudoku.reset();
+            sudoku.setState(SudokuState.EMPTY);
+        }
     }
 
     private boolean validateXml() {

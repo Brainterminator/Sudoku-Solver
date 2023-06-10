@@ -3,6 +3,7 @@ package de.eidoop.sudoku.solver.frames;
 import de.eidoop.sudoku.api.entities.Sudoku;
 import de.eidoop.sudoku.api.exceptions.*;
 import de.eidoop.sudoku.api.loader.XMLLoader;
+import de.eidoop.sudoku.api.saver.XMLSaver;
 import de.eidoop.sudoku.api.solver.BruteForceSolver;
 import de.eidoop.sudoku.api.solver.SaveSolver;
 import de.eidoop.sudoku.api.ui.ISudokuRenderer;
@@ -117,7 +118,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         // XML Select Button
 
         Button xmlSelectButton = new Button();
-        xmlSelectButton.setLabel("Select XML");
+        xmlSelectButton.setLabel("Select Path");
         xmlSelectButton.addActionListener(e -> {
             fileOpener.show();
         });
@@ -136,6 +137,16 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         xmlLoadButton.setBounds(10, offset + 4 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(xmlLoadButton);
 
+        // XML Load Button
+
+        Button xmlSaveButton = new Button();
+        xmlSaveButton.setLabel("Save XML");
+        xmlSaveButton.addActionListener(e -> {
+            new XMLSaver(sudoku).save(fileOpener.getPath());
+        });
+        xmlSaveButton.setBounds(10, offset + 5 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(xmlSaveButton);
+
 
         // State display
 
@@ -148,7 +159,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         };
         state.setBackground(Color.LIGHT_GRAY);
         state.setAlignment(Label.CENTER);
-        state.setBounds(10, offset + 5 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
+        state.setBounds(10, offset + 6 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(state);
 
 
@@ -160,20 +171,8 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             new BruteForceSolver(sudoku).solve();
             print(sudoku);
         });
-        solveButton.setBounds(10, offset + 6 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
+        solveButton.setBounds(10, offset + 7 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(solveButton);
-
-        //Next Step Button
-
-        Button nextStepButton = new Button();
-        nextStepButton.setLabel("Next Step");
-        nextStepButton.addActionListener(e -> {
-            new SaveSolver(sudoku).solve();
-            print(sudoku);
-        });
-        nextStepButton.setBounds(10, offset + 7 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
-        this.add(nextStepButton);
-
 
         // Sudoku Fields
 

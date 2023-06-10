@@ -8,8 +8,6 @@ import de.eidoop.sudoku.solver.frames.SudokuFrame;
 public class App {
     public static void main(String[] args) {
         Sudoku sudoku = new Sudoku();
-        SudokuLoader loader = new ExampleLoader();
-        loader.loadSudoku(sudoku);
-        SudokuFrame sudokuFrame = new SudokuFrame(sudoku);
+        new SudokuFrame(sudoku);
     }
 }
