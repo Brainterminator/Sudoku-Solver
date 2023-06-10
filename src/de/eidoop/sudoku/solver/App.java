@@ -6,6 +6,8 @@ import de.eidoop.sudoku.api.loader.SudokuLoader;
 import de.eidoop.sudoku.solver.frames.SudokuFrame;
 
 public class App {
+
+    //THE MASTER BRANCH IS STRICTLY PROTECTED - VIEW ONLY
     public static void main(String[] args) {
         Sudoku sudoku = new Sudoku();
         SudokuLoader loader = new ExampleLoader();
