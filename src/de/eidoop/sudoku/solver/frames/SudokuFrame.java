@@ -1,15 +1,14 @@
 package de.eidoop.sudoku.solver.frames;
 
 import de.eidoop.sudoku.api.entities.Sudoku;
-import de.eidoop.sudoku.api.enums.SudokuState;
 import de.eidoop.sudoku.api.exceptions.*;
-import de.eidoop.sudoku.api.loader.ExampleLoader;
-import de.eidoop.sudoku.api.loader.SudokuLoader;
+import de.eidoop.sudoku.api.loader.XMLLoader;
 import de.eidoop.sudoku.api.solver.BruteForceSolver;
 import de.eidoop.sudoku.api.solver.SaveSolver;
 import de.eidoop.sudoku.api.ui.ISudokuRenderer;
 import de.eidoop.sudoku.solver.components.SudokuButton;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,11 +22,14 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
     private final TextField text;
     private final Sudoku sudoku;
 
+    private final OpenFileFrame fileOpener;
+
     public SudokuFrame(Sudoku sudoku) {
         super("Sudoku App");
+        fileOpener = new OpenFileFrame(this);
         int buttonSize = 25;
-        int elementWidth = 9*buttonSize;
-        int height = 455;
+        int elementWidth = 9 * buttonSize;
+        int height = 482;
         int width = elementWidth + 20;
         int offset = 31;
         int gridSize = 2;
@@ -108,21 +110,31 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             currentError = "";
             print(sudoku);
         });
-        emptyButton.setBounds(10, offset + 2*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        emptyButton.setBounds(10, offset + 2 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(emptyButton);
 
 
-        // Example Button
+        // XML Select Button
 
-        Button exampleButton = new Button();
-        exampleButton.setLabel("New Example");
-        exampleButton.addActionListener(e -> {
-            new ExampleLoader().loadSudoku(sudoku);
+        Button xmlSelectButton = new Button();
+        xmlSelectButton.setLabel("Select XML");
+        xmlSelectButton.addActionListener(e -> {
+            fileOpener.show();
+        });
+        xmlSelectButton.setBounds(10, offset + 3 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(xmlSelectButton);
+
+        // XML Load Button
+
+        Button xmlLoadButton = new Button();
+        xmlLoadButton.setLabel("Load XML");
+        xmlLoadButton.addActionListener(e -> {
+            new XMLLoader(fileOpener.getPath()).loadSudoku(sudoku);
             currentError = "";
             print(sudoku);
         });
-        exampleButton.setBounds(10, offset + 3*(buttonSize + gridSize), buttonSize * 9, buttonSize);
-        this.add(exampleButton);
+        xmlLoadButton.setBounds(10, offset + 4 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
+        this.add(xmlLoadButton);
 
 
         // State display
@@ -136,7 +148,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         };
         state.setBackground(Color.LIGHT_GRAY);
         state.setAlignment(Label.CENTER);
-        state.setBounds(10, offset + 4*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        state.setBounds(10, offset + 5 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(state);
 
 
@@ -148,7 +160,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             new BruteForceSolver(sudoku).solve();
             print(sudoku);
         });
-        solveButton.setBounds(10, offset + 5*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        solveButton.setBounds(10, offset + 6 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(solveButton);
 
         //Next Step Button
@@ -159,7 +171,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             new SaveSolver(sudoku).solve();
             print(sudoku);
         });
-        nextStepButton.setBounds(10, offset + 6*(buttonSize + gridSize), buttonSize * 9, buttonSize);
+        nextStepButton.setBounds(10, offset + 7 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(nextStepButton);
 
 
@@ -178,12 +190,10 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
                         text.requestFocus();
                     }
                 });
-                b.setBounds(i * buttonSize + 10, j * buttonSize + offset + 7*(buttonSize + gridSize), buttonSize, buttonSize);
+                b.setBounds(i * buttonSize + 10, j * buttonSize + offset + 8 * (buttonSize + gridSize), buttonSize, buttonSize);
                 this.add(b);
             }
         }
-
-
 
 
         this.setVisible(true);
