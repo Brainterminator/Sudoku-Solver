@@ -9,6 +9,7 @@ import java.io.File;
 public class OpenFileFrame extends Frame {
 
     private String path;
+    private final JFileChooser fileChooser;
 
     public OpenFileFrame() {
         int width = 720;
@@ -27,10 +28,8 @@ public class OpenFileFrame extends Frame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((screenSize.width-width)/2, (screenSize.height-height)/2);
 
-        JFileChooser fileChooser = new JFileChooser();
-        String jarPath = OpenFileFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        String currentDirectory = new File(jarPath).getParent();
-        fileChooser.setCurrentDirectory(new File(currentDirectory));
+        fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("saved"));
         fileChooser.addActionListener(e -> {
             this.path = fileChooser.getSelectedFile().getAbsolutePath();
             setVisible(false);
@@ -41,5 +40,9 @@ public class OpenFileFrame extends Frame {
 
     public String getPath() {
         return path;
+    }
+
+    public void updatePaths(){
+        fileChooser.rescanCurrentDirectory();
     }
 }

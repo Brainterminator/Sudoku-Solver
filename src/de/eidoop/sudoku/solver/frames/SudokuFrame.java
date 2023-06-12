@@ -38,7 +38,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
             }
         });
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((screenSize.width-width)/2, (screenSize.height-height)/2);
+        this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
 
         this.setLayout(null);
         this.setResizable(false);
@@ -116,7 +116,10 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button xmlSelectButton = new Button();
         xmlSelectButton.setLabel("Select Path");
-        xmlSelectButton.addActionListener(e -> fileOpener.setVisible(true));
+        xmlSelectButton.addActionListener(e -> {
+            fileOpener.updatePaths();
+            fileOpener.setVisible(true);
+        });
         xmlSelectButton.setBounds(10, offset + 3 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(xmlSelectButton);
 
@@ -190,8 +193,11 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
     @Override
     public void print(Sudoku sudoku) {
-        this.setVisible(false);
-        this.setVisible(true);
+        Component[] components = getComponents();
+
+        for (Component component : components) {
+            component.repaint();
+        }
     }
 }
 
