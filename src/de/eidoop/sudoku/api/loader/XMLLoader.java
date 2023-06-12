@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 public class XMLLoader extends SudokuLoader{
-    private String path;
+    private final String path;
     public XMLLoader(String path) {
         this.path = path;
     }
@@ -25,11 +25,11 @@ public class XMLLoader extends SudokuLoader{
     public void loadSudoku(Sudoku sudoku) {
         sudoku.reset();
 
-        // Validiere das XML-Dokument gegen das XML-Schema
+        // Validate the XML-Document against the XML-Scheme
         if (!validateXml())
             return;
 
-        // Lade das Sudoku aus der XML-Datei
+        // Load the Sudoku from the XML-File
         try {
             InputStream xmlInputStream = new FileInputStream(path);
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -43,16 +43,16 @@ public class XMLLoader extends SudokuLoader{
 
     private boolean validateXml() {
         try {
-            // Erstelle ein Schema-Objekt basierend auf dem XML-Schema
+            // Create a Scheme-Object base on the XML-Scheme
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(new File("sudoku.xsd"));
 
-            // Validiere das XML-Dokument gegen das Schema
+            // Validate the XML-Document against the XML-Scheme
             Validator validator = schema.newValidator();
             validator.validate(new StreamSource(new File(path)));
-            return true; // Das XML-Dokument ist valide
+            return true; // The XML-Document is valid
         } catch (Exception e) {
-            return false; // Das XML-Dokument ist nicht valide
+            return false; // The XML-Document is not valid
         }
     }
 }

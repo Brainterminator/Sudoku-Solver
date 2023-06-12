@@ -5,14 +5,10 @@ import de.eidoop.sudoku.api.exceptions.*;
 import de.eidoop.sudoku.api.loader.XMLLoader;
 import de.eidoop.sudoku.api.saver.XMLSaver;
 import de.eidoop.sudoku.api.solver.BruteForceSolver;
-import de.eidoop.sudoku.api.solver.SaveSolver;
 import de.eidoop.sudoku.api.ui.ISudokuRenderer;
 import de.eidoop.sudoku.solver.components.SudokuButton;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -21,13 +17,12 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
     private String currentError = "";
     private int currentX, currentY, currentValue;
     private final TextField text;
-    private final Sudoku sudoku;
 
     private final OpenFileFrame fileOpener;
 
     public SudokuFrame(Sudoku sudoku) {
         super("Sudoku App");
-        fileOpener = new OpenFileFrame(this);
+        fileOpener = new OpenFileFrame();
         int buttonSize = 25;
         int elementWidth = 9 * buttonSize;
         int height = 482;
@@ -35,7 +30,6 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
         int offset = 31;
         int gridSize = 2;
         this.setSize(width, height);
-        this.sudoku = sudoku;
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -119,9 +113,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button xmlSelectButton = new Button();
         xmlSelectButton.setLabel("Select Path");
-        xmlSelectButton.addActionListener(e -> {
-            fileOpener.show();
-        });
+        xmlSelectButton.addActionListener(e -> fileOpener.setVisible(true));
         xmlSelectButton.setBounds(10, offset + 3 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(xmlSelectButton);
 
@@ -141,9 +133,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button xmlSaveButton = new Button();
         xmlSaveButton.setLabel("Save XML");
-        xmlSaveButton.addActionListener(e -> {
-            new XMLSaver(sudoku).save(fileOpener.getPath());
-        });
+        xmlSaveButton.addActionListener(e -> new XMLSaver(sudoku).save(fileOpener.getPath()));
         xmlSaveButton.setBounds(10, offset + 5 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(xmlSaveButton);
 
@@ -181,13 +171,10 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
                 // Generate single buttons
                 SudokuButton b = new SudokuButton(i, j, sudoku);
                 b.setLabel("");
-                b.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        currentX = ((SudokuButton) e.getSource()).x;
-                        currentY = ((SudokuButton) e.getSource()).y;
-                        text.requestFocus();
-                    }
+                b.addActionListener(e -> {
+                    currentX = ((SudokuButton) e.getSource()).x;
+                    currentY = ((SudokuButton) e.getSource()).y;
+                    text.requestFocus();
                 });
                 b.setBounds(i * buttonSize + 10, j * buttonSize + offset + 8 * (buttonSize + gridSize), buttonSize, buttonSize);
                 this.add(b);

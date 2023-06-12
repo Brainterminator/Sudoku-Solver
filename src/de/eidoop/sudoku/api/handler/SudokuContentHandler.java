@@ -6,7 +6,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SudokuContentHandler extends DefaultHandler {
     private StringBuilder cellValue;
-    private Sudoku sudoku;
+    private final Sudoku sudoku;
     private int row = 1;
     private int col = 1;
 
@@ -45,6 +45,7 @@ public class SudokuContentHandler extends DefaultHandler {
             
             col++;
         } catch (Exception e) {
+            System.err.println("END ELEMENT ERROR");
         }
     }
 }
