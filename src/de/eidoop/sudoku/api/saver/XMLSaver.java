@@ -39,7 +39,7 @@ public class XMLSaver {
             }
 
             // Save the XML document to a file
-            File file = new File(name + ".xml");
+            File file = new File("saved/" + name + ".xml");
             javax.xml.transform.TransformerFactory transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
             javax.xml.transform.Transformer transformer = transformerFactory.newTransformer();
             javax.xml.transform.dom.DOMSource source = new javax.xml.transform.dom.DOMSource(doc);

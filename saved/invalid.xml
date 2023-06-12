@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sudoku xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="sudoku.xsd">
+        xsi:noNamespaceSchemaLocation="../sudoku.xsd">
     <butter></butter>
     <row>
         <cell>0</cell>

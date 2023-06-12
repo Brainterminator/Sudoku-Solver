@@ -37,6 +37,8 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
                 System.exit(0);
             }
         });
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((screenSize.width-width)/2, (screenSize.height-height)/2);
 
         this.setLayout(null);
         this.setResizable(false);

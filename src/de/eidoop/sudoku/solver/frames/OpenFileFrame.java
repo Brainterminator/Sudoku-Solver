@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 public class OpenFileFrame extends Frame {
 
@@ -23,8 +24,13 @@ public class OpenFileFrame extends Frame {
         });
         this.setLayout(null);
         this.setResizable(false);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((screenSize.width-width)/2, (screenSize.height-height)/2);
 
         JFileChooser fileChooser = new JFileChooser();
+        String jarPath = OpenFileFrame.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String currentDirectory = new File(jarPath).getParent();
+        fileChooser.setCurrentDirectory(new File(currentDirectory));
         fileChooser.addActionListener(e -> {
             this.path = fileChooser.getSelectedFile().getAbsolutePath();
             setVisible(false);
