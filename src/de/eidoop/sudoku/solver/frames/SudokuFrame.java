@@ -8,6 +8,7 @@ import de.eidoop.sudoku.api.solver.BruteForceSolver;
 import de.eidoop.sudoku.api.ui.ISudokuRenderer;
 import de.eidoop.sudoku.solver.components.SudokuButton;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -133,7 +134,7 @@ public class SudokuFrame extends Frame implements ISudokuRenderer {
 
         Button xmlSaveButton = new Button();
         xmlSaveButton.setLabel("Save XML");
-        xmlSaveButton.addActionListener(e -> new XMLSaver(sudoku).save(fileOpener.getPath()));
+        xmlSaveButton.addActionListener(e -> new XMLSaver(sudoku).save(JOptionPane.showInputDialog("Enter Name:")));
         xmlSaveButton.setBounds(10, offset + 5 * (buttonSize + gridSize), buttonSize * 9, buttonSize);
         this.add(xmlSaveButton);
 
